@@ -50,14 +50,31 @@ body {
     padding: 8px;
 }
 
-.task-item{
-    padding: 8px;
-    border: 2px dashed black;
-}
-
 .add-task-text{
     width: 100%;
     padding: 10px;
     border: 1px solid gray;
     box-sizing: border-box;
+}
+
+.task-item{
+    padding: 8px;
+    padding-right: 40px;
+    border: 2px dashed black;
+    position: relative;
+}
+
+.task_move_arrows{
+    position: absolute;
+    right: 10px;
+    top: 6px;
+}
+
+.move_left_link{
+    color: red;
+    text-decoration: none;
+}
+.move_right_link{
+    color: green;
+    text-decoration: none;
 }
