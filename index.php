@@ -1,4 +1,20 @@
 <?php
+$langcode = "en";
+$lang = array(
+    "en" => array(
+        "todo" => "TO-DO",
+        "in_progress" => "In Progress",
+        "done" => "Done",
+        "task_value" => "Task Value"
+    ),
+    "tr" => array(
+        "todo" => "Yapılacaklar",
+        "in_progress" => "Devam Ediyor",
+        "done" => "Bitti",
+        "task_value" => "Görev içeriği"
+    )
+);
+
 ob_start();
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -26,9 +42,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 </head>
 <body>
     <div class="parent">
-        <div class="div1 table-header">TO-DO</div>
-        <div class="div2 table-header">Developing</div>
-        <div class="div3 table-header">Completed</div>
+        <div class="div1 table-header"><?php echo $lang[$langcode]["todo"] ?></div>
+        <div class="div2 table-header"><?php echo $lang[$langcode]["in_progress"] ?></div>
+        <div class="div3 table-header"><?php echo $lang[$langcode]["done"] ?></div>
 
         <div class="div4 task-panel">
         <?php
@@ -69,4 +85,5 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     </div>
 </body>
 </html>
-<script src="main.js"></script>
+
+<?php include 'js.php';?>
