@@ -16,6 +16,11 @@ $lang = array(
 );
 
 ob_start();
+
+if(isset($_GET["task_delete"])){
+    unlink($_GET["task_delete"]);
+    header("Location: index.php");
+}
 if(isset($_GET["task_move_right"])){
     rename($_GET["task_move_right"], (((int)explode("_", $_GET["task_move_right"])[0]) + 1)."_".explode("_", $_GET["task_move_right"])[1]);
     header("Location: index.php");
@@ -61,7 +66,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php
                     if(explode("_", $file)[0] == "1"){
                 ?>
-                    <div class="task-item"><?php echo file_get_contents($file); ?><div class="task_move_arrows"><a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">&gt;&gt;</a></div></div>
+                    <div class="task-item">
+                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
+                        <?php echo file_get_contents($file); ?><div class="task_move_arrows">
+                            <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">&gt;&gt;</a>
+                        </div>
+                    </div>
                 <?php } ?>
         <?php } ?>
         </div>
@@ -73,7 +83,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php
                     if(explode("_", $file)[0] == "2"){
                 ?>
-                    <div class="task-item"><?php echo file_get_contents($file); ?><div class="task_move_arrows"><a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">&lt;&lt;</a> <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">&gt;&gt;</a></div></div>
+                    <div class="task-item">
+                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
+                        <?php echo file_get_contents($file); ?>
+                        <div class="task_move_arrows">
+                            <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">&lt;&lt;</a> 
+                            <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">&gt;&gt;</a>
+                        </div>
+                    </div>
                 <?php } ?>
         <?php } ?>
         </div>
@@ -85,7 +102,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php
                     if(explode("_", $file)[0] == "3"){
                 ?>
-                    <div class="task-item"><?php echo file_get_contents($file); ?><div class="task_move_arrows"><a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">&lt;&lt;</a></div></div>
+                    <div class="task-item">
+                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
+                        <?php echo file_get_contents($file); ?>
+                        <div class="task_move_arrows">
+                            <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">&lt;&lt;</a>
+                        </div>
+                    </div>
                 <?php } ?>
         <?php } ?>
         </div>
