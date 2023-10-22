@@ -1,5 +1,8 @@
 <?php
+//Config
 $langcode = "en";
+
+//Localization
 $lang = array(
     "en" => array(
         "todo" => "TO-DO",
@@ -17,18 +20,54 @@ $lang = array(
 
 ob_start();
 
+function addLog($message){
+    //Update log timestamp(Default: 'Europe/Istanbul')
+    date_default_timezone_set("Europe/Istanbul");
+    
+    $logfile = fopen("log.txt", "a") or die("Unable to open file!");
+    fwrite($logfile, date("[d.m.Y H:i:s]", time()).$message."\n");
+    fclose($logfile);
+}
+
+/////////////////////
+//Start delete task//
+/////////////////////
 if(isset($_GET["task_delete"])){
     unlink($_GET["task_delete"]);
+    addLog("delete task: ".$_GET["task_delete"]);
     header("Location: index.php");
 }
+///////////////////
+//End delete task//
+///////////////////
+
+/////////////////////////
+//Start move right task//
+/////////////////////////
 if(isset($_GET["task_move_right"])){
     rename($_GET["task_move_right"], (((int)explode("_", $_GET["task_move_right"])[0]) + 1)."_".explode("_", $_GET["task_move_right"])[1]);
+    addLog("move right task: ".$_GET["task_move_right"]);
     header("Location: index.php");
 }
+///////////////////////
+//End move right task//
+///////////////////////
+
+////////////////////////
+//Start move left task//
+////////////////////////
 if(isset($_GET["task_move_left"])){
     rename($_GET["task_move_left"], (((int)explode("_", $_GET["task_move_left"])[0]) - 1)."_".explode("_", $_GET["task_move_left"])[1]);
+    addLog("move left task: ".$_GET["task_move_left"]);
     header("Location: index.php");
 }
+//////////////////////
+//End move left task//
+//////////////////////
+
+//////////////////
+//Start add task//
+//////////////////
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $index = ((int)file_get_contents("task-index.txt"));
     $indexfile = fopen("task-index.txt", "w") or die("Unable to open file!");
@@ -39,9 +78,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $myfile = fopen($_GET["level"]."_".$index.".txt", "w") or die("Unable to open file!");
     fwrite($myfile, $_POST["taskvalue"]);
     fclose($myfile);
+    addLog("add task: ".($_GET["level"]."_".$index.".txt"));
 
     header("Location: index.php");
 }
+////////////////
+//End add task//
+////////////////
 ?>
 
 <!DOCTYPE html>
