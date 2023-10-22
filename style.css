@@ -60,6 +60,7 @@ body {
 .task-item{
     padding: 8px;
     padding-right: 40px;
+    padding-left: 20px;
     border: 2px dashed black;
     position: relative;
 }
@@ -68,6 +69,15 @@ body {
     position: absolute;
     right: 10px;
     top: 6px;
+}
+.remove_task_link {
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    color: red;
+    text-decoration: none;
 }
 
 .move_left_link{
