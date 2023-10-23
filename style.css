@@ -1,3 +1,7 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 body {
     height: 100vh;
     width: 100vw;
@@ -48,6 +52,7 @@ body {
     display: flex;
     align-items: center;
     padding: 8px;
+    user-select: none;
 }
 
 .add-task-text{
@@ -63,6 +68,7 @@ body {
     padding-left: 20px;
     border: 2px dashed black;
     position: relative;
+    user-select: none;
 }
 
 .task_move_arrows{
@@ -83,8 +89,78 @@ body {
 .move_left_link{
     color: red;
     text-decoration: none;
+    transition: 200ms;
+    padding: 2px;
 }
+.move_left_link:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
 .move_right_link{
     color: green;
     text-decoration: none;
+    transition: 200ms;
+    padding: 2px;
+}
+.move_right_link:hover{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+}
+
+.edit-task-panel-back{
+    z-index: 99;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+.edit-task-panel{
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 20px;
+    width: 35%;
+    height: 35%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0px 30px;
+}
+.edit-task-panel > form {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+}
+.edit-task-panel > form > h1{
+    color: white;
+}
+.edit-task-panel > form > textarea{
+    width:100%;
+    height: 50%;
+    outline: 0px;
+}
+.edit-task-panel > form > div {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.edit-task-panel-button {
+    border-radius: 50px;
+    border: 0;
+    padding: 7px 14px;
+    outline: 0px;
+    color:white;
+    font-weight: bold;
+}.edit-task-panel-button:nth-child(1) {
+    background-color: maroon;
+}.edit-task-panel-button:nth-child(2) {
+    background-color: green;
 }
