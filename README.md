@@ -9,7 +9,7 @@ JavaScript task board without frameworks or modules. With this project, a board 
 - [X] Multi-Language Support
 - [X] Delete task
 - [X] Logging
-- [ ] Edit Task
+- [X] Edit Task
 
 ## License
 [MIT License](LICENSE)
