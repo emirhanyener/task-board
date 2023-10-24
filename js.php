@@ -18,10 +18,11 @@
         document.querySelector(".edit-task-panel-back").style.visibility = "hidden";
     });
 
-    function openEditPanel(filename, value){
+    function openEditPanel(filename, value, color){
         document.querySelector(".edit-task-panel-back").style.visibility = "visible";
         
         document.querySelector(".edit-task-textarea").innerHTML = value;
+        document.querySelector("#edit-task-color").value = color;
         document.querySelector("#edit-task-form").action = "?edit_task=" + filename;
     }
 </script>
