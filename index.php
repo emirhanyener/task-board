@@ -1,6 +1,7 @@
 <?php
 //Config
 $langcode = "en";
+$taskspath = "./tasks/";
 
 //Localization
 $lang = array(
@@ -39,7 +40,7 @@ function addLog($message){
 //Start delete task//
 /////////////////////
 if(isset($_GET["task_delete"])){
-    unlink($_GET["task_delete"]);
+    unlink($taskspath.$_GET["task_delete"]);
     addLog("delete task: ".$_GET["task_delete"]);
     header("Location: index.php");
 }
@@ -51,7 +52,7 @@ if(isset($_GET["task_delete"])){
 //Start move right task//
 /////////////////////////
 if(isset($_GET["task_move_right"])){
-    rename($_GET["task_move_right"], (((int)explode("_", $_GET["task_move_right"])[0]) + 1)."_".explode("_", $_GET["task_move_right"])[1]);
+    rename($taskspath.$_GET["task_move_right"], $taskspath.(((int)explode("_", $_GET["task_move_right"])[0]) + 1)."_".explode("_", $_GET["task_move_right"])[1]);
     addLog("move right task: ".$_GET["task_move_right"]);
     header("Location: index.php");
 }
@@ -63,7 +64,7 @@ if(isset($_GET["task_move_right"])){
 //Start move left task//
 ////////////////////////
 if(isset($_GET["task_move_left"])){
-    rename($_GET["task_move_left"], (((int)explode("_", $_GET["task_move_left"])[0]) - 1)."_".explode("_", $_GET["task_move_left"])[1]);
+    rename($taskspath.$_GET["task_move_left"], $taskspath.(((int)explode("_", $_GET["task_move_left"])[0]) - 1)."_".explode("_", $_GET["task_move_left"])[1]);
     addLog("move left task: ".$_GET["task_move_left"]);
     header("Location: index.php");
 }
@@ -76,19 +77,19 @@ if(isset($_GET["task_move_left"])){
 //////////////////
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_GET["edit_task"])){
-        $taskfile = fopen($_GET["edit_task"], "w") or die("Unable to open file!");
+        $taskfile = fopen($taskspath.$_GET["edit_task"], "w") or die("Unable to open file!");
         fwrite($taskfile, $_POST["color"]."<-|-|->".$_POST["value"]);
         fclose($taskfile);
 
         header("Location: index.php");
     } else {
-        $index = ((int)file_get_contents("task-index.txt"));
+        $index = ((int)file_get_contents($taskspath."task-index.txt"));
         $indexfile = fopen("task-index.txt", "w") or die("Unable to open file!");
     
         fwrite($indexfile, ($index + 1));
         fclose($indexfile);
     
-        $myfile = fopen($_GET["level"]."_".$index.".txt", "w") or die("Unable to open file!");
+        $myfile = fopen($taskspath.$_GET["level"]."_".$index.".txt", "w") or die("Unable to open file!");
         fwrite($myfile, $_POST["taskcolor"]."<-|-|->".$_POST["taskvalue"]);
         fclose($myfile);
         addLog("add task: ".($_GET["level"]."_".$index.".txt"));
@@ -130,16 +131,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         <div class="div4 task-panel">
         <?php
-            $files = array_diff(scandir("./"), array('.', '..'));
+            $files = array_diff(scandir($taskspath), array('.', '..'));
             foreach ($files as $file) {
         ?>
                 <?php
                     if(explode("_", $file)[0] == "1"){
                 ?>
                     <div class="task-item">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
                         </div>
@@ -153,16 +154,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </div>
         <div class="div5 task-panel">
         <?php
-            $files = array_diff(scandir("./"), array('.', '..'));
             foreach ($files as $file) {
         ?>
                 <?php
                     if(explode("_", $file)[0] == "2"){
                 ?>
                     <div class="task-item">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a> 
                             <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
@@ -177,16 +177,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         </div>
         <div class="div6 task-panel">
         <?php
-            $files = array_diff(scandir("./"), array('.', '..'));
             foreach ($files as $file) {
         ?>
                 <?php
                     if(explode("_", $file)[0] == "3"){
                 ?>
                     <div class="task-item">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a>
                         </div>
