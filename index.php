@@ -77,7 +77,7 @@ if(isset($_GET["task_move_left"])){
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_GET["edit_task"])){
         $taskfile = fopen($_GET["edit_task"], "w") or die("Unable to open file!");
-        fwrite($taskfile, $_POST["value"]);
+        fwrite($taskfile, $_POST["color"]."<-|-|->".$_POST["value"]);
         fclose($taskfile);
 
         header("Location: index.php");
@@ -89,7 +89,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         fclose($indexfile);
     
         $myfile = fopen($_GET["level"]."_".$index.".txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $_POST["taskvalue"]);
+        fwrite($myfile, $_POST["taskcolor"]."<-|-|->".$_POST["taskvalue"]);
         fclose($myfile);
         addLog("add task: ".($_GET["level"]."_".$index.".txt"));
     
@@ -119,6 +119,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     <input type="button" value="<?php echo $lang[$langcode]["cancel"] ?>" class="edit-task-panel-button"></button>
                     <button type="submit" class="edit-task-panel-button"><?php echo $lang[$langcode]["edit"] ?></button>
                 </div>
+                <input type="color" name="color" id="edit-task-color">
             </form>
         </div>
     </div>
@@ -136,15 +137,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if(explode("_", $file)[0] == "1"){
                 ?>
                     <div class="task-item">
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo file_get_contents($file); ?>')"><?php echo file_get_contents($file); ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
                         </div>
                     </div>
                 <?php } ?>
         <?php } ?>
-        <form action="/?level=1" method="post">
+        <form action="/?level=1" method="post" class = "add-task-form">
+            <input type="color" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
@@ -157,8 +160,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if(explode("_", $file)[0] == "2"){
                 ?>
                     <div class="task-item">
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo file_get_contents($file); ?>')"><?php echo file_get_contents($file); ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a> 
                             <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
@@ -166,7 +170,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     </div>
                 <?php } ?>
         <?php } ?>
-        <form action="/?level=2" method="post">
+        <form action="/?level=2" method="post" class = "add-task-form">
+            <input type="color" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
@@ -179,15 +184,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     if(explode("_", $file)[0] == "3"){
                 ?>
                     <div class="task-item">
+                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo file_get_contents($file); ?>')"><?php echo file_get_contents($file); ?></div>
+                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($file))[1]; ?></div>
                         <div class="task_move_arrows">
                             <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a>
                         </div>
                     </div>
                 <?php } ?>
         <?php } ?>
-        <form action="/?level=3" method="post">
+        <form action="/?level=3" method="post" class = "add-task-form">
+            <input type="color" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
