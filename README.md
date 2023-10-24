@@ -12,5 +12,9 @@ JavaScript task board without frameworks or modules. With this project, a board 
 - [X] Edit Task
 - [X] Task Color
 
+## Images
+### Main
+![main](images/screenshot1.png)
+
 ## License
 [MIT License](LICENSE)
