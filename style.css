@@ -19,32 +19,36 @@ body {
 
 .div1 {
     grid-area: 1 / 1 / 2 / 2;
-    border: 5px solid rgb(0, 153, 255);
+    border-bottom: 5px solid rgb(0, 153, 255);
+    border-right: 1px solid gray;
 }
 
 .div2 {
     grid-area: 1 / 2 / 2 / 3;
-    border: 5px solid orange;
+    border-bottom: 5px solid orange;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
 }
 
 .div3 {
     grid-area: 1 / 3 / 2 / 4;
-    border: 5px solid green;
+    border-bottom: 5px solid green;
+    border-left: 1px solid gray;
 }
 
 .div4 {
     grid-area: 2 / 1 / 3 / 2;
-    border: 1px dashed rgb(0, 153, 255);
+    border: 1px solid rgb(0, 153, 255);
 }
 
 .div5 {
     grid-area: 2 / 2 / 3 / 3;
-    border: 1px dashed orange;
+    border: 1px solid orange;
 }
 
 .div6 {
     grid-area: 2 / 3 / 3 / 4;
-    border: 1px dashed green;
+    border: 1px solid green;
 }
 
 .table-header {
@@ -56,32 +60,33 @@ body {
     user-select: none;
 }
 
-.add-task-text{
+.add-task-text {
     width: 100%;
-    padding: 10px 20px;
+    padding: 10px 37px 10px 10px;
     border: 4px solid black;
     box-sizing: border-box;
+    outline: 0px;
 }
 
 .add-task-color {
     position: absolute;
-    top: 2px;
-    left: 4px;
+    top: 7px;
+    right: 9px;
     appearance: none;
     background-color: transparent;
-    width: 16px;
-    height: 39px;
+    width: 25px;
+    height: 30px;
     border: 0px;
     padding: 0px;
     cursor: pointer;
 }
 .add-task-color::-moz-color-swatch {
     border: 0;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 4px;
 }
 .add-task-color::-webkit-color-swatch {
     border: 0;
-    border-radius: 0px 8px 8px 0px;
+    border-radius: 4px;
 }
 .add-task-form{
     position: relative;
@@ -92,7 +97,7 @@ body {
     padding: 8px;
     padding-right: 55px;
     padding-left: 16px;
-    border: 1px dashed black;
+    border-bottom: 1px solid black;
     position: relative;
     text-align: justify;
     user-select: none;
@@ -154,7 +159,7 @@ body {
 }
 .edit-task-panel{
     background-color: rgba(0, 0, 0, 0.6);
-    border-radius: 20px;
+    border-radius: 8px;
     width: 35%;
     height: 35%;
     position: fixed;
@@ -187,6 +192,9 @@ body {
     justify-content: flex-end;
     gap: 10px;
 }
+.edit-task-panel > form > h1 {
+    user-select: none;
+}
 .edit-task-panel-button {
     border-radius: 4px;
     border: 0;
@@ -199,8 +207,24 @@ body {
 }.edit-task-panel-button:nth-child(2) {
     background-color: green;
 }
-#edit-task-color{
+
+#edit-task-color {
     position: absolute;
     bottom: 10px;
     left: 0px;
+    appearance: none;
+    background-color: transparent;
+    width: 64px;
+    height: 30px;
+    border: 0px;
+    padding: 0px;
+    cursor: pointer;
+}
+#edit-task-color::-moz-color-swatch {
+    border: 0;
+    border-radius: 4px;
+}
+#edit-task-color::-webkit-color-swatch {
+    border: 0;
+    border-radius: 4px;
 }

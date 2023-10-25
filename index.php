@@ -148,7 +148,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php } ?>
         <?php } ?>
         <form action="/?level=1" method="post" class = "add-task-form">
-            <input type="color" name="taskcolor" class="add-task-color"/>
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
@@ -171,7 +171,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php } ?>
         <?php } ?>
         <form action="/?level=2" method="post" class = "add-task-form">
-            <input type="color" name="taskcolor" class="add-task-color"/>
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
@@ -193,7 +193,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php } ?>
         <?php } ?>
         <form action="/?level=3" method="post" class = "add-task-form">
-            <input type="color" name="taskcolor" class="add-task-color"/>
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
