@@ -137,7 +137,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <?php
                     if(explode("_", $file)[0] == "1"){
                 ?>
-                    <div class="task-item">
+                    <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>')">
                         <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
                         <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
                         <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>

@@ -25,4 +25,9 @@
         document.querySelector("#edit-task-color").value = color;
         document.querySelector("#edit-task-form").action = "?edit_task=" + filename;
     }
+
+    function CopyToClipboardFunction(e, text){
+        e.preventDefault();
+        navigator.clipboard.writeText(text);
+    }
 </script>
