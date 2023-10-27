@@ -152,13 +152,13 @@ body {
     z-index: 99;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.5);
     position: absolute;
     top: 0px;
     left: 0px;
 }
 .edit-task-panel{
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgb(28 28 28);
     border-radius: 8px;
     width: 35%;
     height: 35%;
