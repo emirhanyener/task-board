@@ -83,7 +83,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         header("Location: index.php");
     } else {
-        $index = ((int)file_get_contents($taskspath."task-index.txt"));
+        $index = ((int)file_get_contents("task-index.txt"));
         $indexfile = fopen("task-index.txt", "w") or die("Unable to open file!");
     
         fwrite($indexfile, ($index + 1));
