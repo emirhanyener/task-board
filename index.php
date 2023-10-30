@@ -1,7 +1,11 @@
 <?php
 //Config
 $langcode = "en";
-$taskspath = "./tasks/";
+
+$host = "localhost";
+$dbname = "task_board";
+$username = "root";
+$password = "";
 
 //Localization
 $lang = array(
@@ -26,22 +30,90 @@ $lang = array(
 );
 
 ob_start();
+session_start();
 
-function addLog($message){
-    //Update log timestamp(Default: 'Europe/Istanbul')
+//////////////////////////
+//Start database connect//
+//////////////////////////
+try {
+    $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Database connection error: " . $e->getMessage());
+}
+////////////////////////
+//End database connect//
+////////////////////////
+
+/////////////////
+//Start add log//
+/////////////////
+function addLog($db, $message) {
     date_default_timezone_set("Europe/Istanbul");
-    
-    $logfile = fopen("log.txt", "a") or die("Unable to open file!");
-    fwrite($logfile, date("[d.m.Y H:i:s]", time()).$message."\n");
-    fclose($logfile);
+    $query = $db->prepare("INSERT INTO logs (timestamp, message) VALUES (:timestamp, :message)");
+    $query->bindParam(":timestamp", date("[d.m.Y H:i:s]", time()));
+    $query->bindParam(":message", $message);
+    $query->execute();
+}
+///////////////
+//End add log//
+///////////////
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_GET["edit_task"])) {
+        ///////////////////
+        //Start edit task//
+        ///////////////////
+        $color = $_POST["color"];
+        $value = $_POST["value"];
+        $taskId = $_GET["edit_task"];
+
+        $query = $db->prepare("UPDATE tasks SET color = :color, value = :value WHERE id = :id");
+        $query->bindParam(":color", $color);
+        $query->bindParam(":value", $value);
+        $query->bindParam(":id", $taskId);
+        $query->execute();
+
+        header("Location: index.php");
+        /////////////////
+        //End edit task//
+        /////////////////
+    } else {
+        //////////////////
+        //Start add task//
+        //////////////////
+        $level = $_GET["level"];
+        $taskcolor = $_POST["taskcolor"];
+        $taskvalue = $_POST["taskvalue"];
+
+        $query = $db->prepare("INSERT INTO tasks (level, color, value) VALUES (:level, :color, :value)");
+        $query->bindParam(":level", $level);
+        $query->bindParam(":color", $taskcolor);
+        $query->bindParam(":value", $taskvalue);
+        $query->execute();
+
+        $lastInsertedId = $db->lastInsertId();
+        addLog($db, "add task: " . $lastInsertedId);
+
+        header("Location: index.php");
+        ////////////////
+        //End add task//
+        ////////////////
+    }
 }
 
 /////////////////////
 //Start delete task//
 /////////////////////
-if(isset($_GET["task_delete"])){
-    unlink($taskspath.$_GET["task_delete"]);
-    addLog("delete task: ".$_GET["task_delete"]);
+if (isset($_GET["task_delete"])) {
+    $taskId = $_GET["task_delete"];
+    
+    $query = $db->prepare("DELETE FROM tasks WHERE id = :id");
+    $query->bindParam(":id", $taskId);
+    $query->execute();
+
+    addLog($db, "delete task: " . $taskId);
+
     header("Location: index.php");
 }
 ///////////////////
@@ -51,9 +123,15 @@ if(isset($_GET["task_delete"])){
 /////////////////////////
 //Start move right task//
 /////////////////////////
-if(isset($_GET["task_move_right"])){
-    rename($taskspath.$_GET["task_move_right"], $taskspath.(((int)explode("_", $_GET["task_move_right"])[0]) + 1)."_".explode("_", $_GET["task_move_right"])[1]);
-    addLog("move right task: ".$_GET["task_move_right"]);
+if (isset($_GET["task_move_right"])) {
+    $taskId = $_GET["task_move_right"];
+    
+    $query = $db->prepare("UPDATE tasks SET level = level + 1 WHERE id = :id");
+    $query->bindParam(":id", $taskId);
+    $query->execute();
+
+    addLog($db, "move right task: " . $taskId);
+
     header("Location: index.php");
 }
 ///////////////////////
@@ -63,43 +141,20 @@ if(isset($_GET["task_move_right"])){
 ////////////////////////
 //Start move left task//
 ////////////////////////
-if(isset($_GET["task_move_left"])){
-    rename($taskspath.$_GET["task_move_left"], $taskspath.(((int)explode("_", $_GET["task_move_left"])[0]) - 1)."_".explode("_", $_GET["task_move_left"])[1]);
-    addLog("move left task: ".$_GET["task_move_left"]);
+if (isset($_GET["task_move_left"])) {
+    $taskId = $_GET["task_move_left"];
+    
+    $query = $db->prepare("UPDATE tasks SET level = level - 1 WHERE id = :id");
+    $query->bindParam(":id", $taskId);
+    $query->execute();
+
+    addLog($db, "move left task: " . $taskId);
+
     header("Location: index.php");
 }
 //////////////////////
 //End move left task//
 //////////////////////
-
-//////////////////
-//Start add task//
-//////////////////
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-    if(isset($_GET["edit_task"])){
-        $taskfile = fopen($taskspath.$_GET["edit_task"], "w") or die("Unable to open file!");
-        fwrite($taskfile, $_POST["color"]."<-|-|->".$_POST["value"]);
-        fclose($taskfile);
-
-        header("Location: index.php");
-    } else {
-        $index = ((int)file_get_contents("task-index.txt"));
-        $indexfile = fopen("task-index.txt", "w") or die("Unable to open file!");
-    
-        fwrite($indexfile, ($index + 1));
-        fclose($indexfile);
-    
-        $myfile = fopen($taskspath.$_GET["level"]."_".$index.".txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $_POST["taskcolor"]."<-|-|->".$_POST["taskvalue"]);
-        fclose($myfile);
-        addLog("add task: ".($_GET["level"]."_".$index.".txt"));
-    
-        header("Location: index.php");
-    }
-}
-////////////////
-//End add task//
-////////////////
 ?>
 
 <!DOCTYPE html>
@@ -108,7 +163,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Task Table</title>
+    <title>Task Board</title>
 </head>
 <body>
     <div class="edit-task-panel-back" style="visibility: hidden;">
@@ -131,69 +186,66 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
         <div class="div4 task-panel">
         <?php
-            $files = array_diff(scandir($taskspath), array('.', '..'));
-            foreach ($files as $file) {
+        $query = $db->prepare("SELECT * FROM tasks");
+        $query->execute();
+        $tasks = $query->fetchAll();
+
+        foreach ($tasks as $task) {
+            if($task["level"] == 1) {
         ?>
-                <?php
-                    if(explode("_", $file)[0] == "1"){
-                ?>
-                    <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>')">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
-                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
-                        <div class="task_move_arrows">
-                            <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
-                        </div>
-                    </div>
-                <?php } ?>
-        <?php } ?>
-        <form action="/?level=1" method="post" class = "add-task-form">
-            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
+            <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
+                <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
+                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
+                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?></div>
+                <div class="task_move_arrows">
+                    <a href="?task_move_right=<?php echo $task['id']; ?>" class="move_right_link">►</a>
+                </div>
+            </div>
+        <?php }} ?>
+
+        <form action="/?level=1" method="post" class="add-task-form">
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
         <div class="div5 task-panel">
         <?php
-            foreach ($files as $file) {
+        foreach ($tasks as $task) {
+            if($task["level"] == 2) {
         ?>
-                <?php
-                    if(explode("_", $file)[0] == "2"){
-                ?>
-                    <div class="task-item">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
-                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
-                        <div class="task_move_arrows">
-                            <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a> 
-                            <a href="?task_move_right=<?php echo $file; ?>" class="move_right_link">►</a>
-                        </div>
-                    </div>
-                <?php } ?>
-        <?php } ?>
-        <form action="/?level=2" method="post" class = "add-task-form">
-            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
+            <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
+                <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
+                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
+                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?></div>
+                <div class="task_move_arrows">
+                    <a href="?task_move_left=<?php echo $task['id']; ?>" class="move_left_link">◄</a> 
+                    <a href="?task_move_right=<?php echo $task['id']; ?>" class="move_right_link">►</a>
+                </div>
+            </div>
+        <?php }} ?>
+
+        <form action="/?level=2" method="post" class="add-task-form">
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
         <div class="div6 task-panel">
         <?php
-            foreach ($files as $file) {
+        foreach ($tasks as $task) {
+            if($task["level"] == 3) {
         ?>
-                <?php
-                    if(explode("_", $file)[0] == "3"){
-                ?>
-                    <div class="task-item">
-                        <div style="background-color: <?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>;" class="task-item-color"></div>
-                        <a href="?task_delete=<?php echo $file; ?>" class="remove_task_link">X</a>
-                        <div ondblclick="openEditPanel('<?php echo $file; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?>', '<?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[0]; ?>')"><?php echo explode("<-|-|->", file_get_contents($taskspath.$file))[1]; ?></div>
-                        <div class="task_move_arrows">
-                            <a href="?task_move_left=<?php echo $file; ?>" class="move_left_link">◄</a>
-                        </div>
-                    </div>
-                <?php } ?>
-        <?php } ?>
-        <form action="/?level=3" method="post" class = "add-task-form">
-            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color"/>
+            <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
+                <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
+                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
+                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?></div>
+                <div class="task_move_arrows">
+                    <a href="?task_move_left=<?php echo $task['id']; ?>" class="move_left_link">◄</a> 
+                </div>
+            </div>
+        <?php }} ?>
+
+        <form action="/?level=3" method="post" class="add-task-form">
+            <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
         </div>
