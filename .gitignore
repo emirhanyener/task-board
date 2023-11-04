@@ -1,4 +1,4 @@
-*.png
-*.jpg
-*.gif
-*.txt
+./*.png
+./*.jpg
+./*.gif
+./*.txt
