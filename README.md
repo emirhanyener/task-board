@@ -11,6 +11,7 @@ JavaScript task board without frameworks or modules. With this project, a board 
 - [X] Logging
 - [X] Edit Task
 - [X] Task Color
+- [X] Task User
 
 ## Images
 ### Main
