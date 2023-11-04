@@ -228,3 +228,27 @@ body {
     border: 0;
     border-radius: 4px;
 }
+
+.user-data-div{
+    color: black;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid lightblue;
+    border-radius: 3px;
+    padding: 10px 20px;
+}
+.user-data-div > a:nth-child(1){
+    color: blue;
+    text-decoration: none;
+}
+.user-data-div > a:nth-child(2){
+    color: red;
+    text-decoration: none;
+}
+
+.task-user-text{
+    color:gray;
+    font-size: 14px;
+}
