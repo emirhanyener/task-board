@@ -22,10 +22,6 @@ $lang = array(
 if(isset($_SESSION["username"])){
     header("Location: index.php");
 }
-if(isset($_GET["logout"])){
-  session_destroy();
-  header("Location: index.php");
-}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if(!isset($_SESSION["username"])){
     $query = $db->query("SELECT * FROM users where username = '".str_replace(["\"", "'"], "", $_POST["username"])."' and password = '".str_replace(["\"", "'"], "", $_POST["password"])."'")->fetch(PDO::FETCH_ASSOC);
