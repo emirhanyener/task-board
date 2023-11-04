@@ -19,7 +19,10 @@ $lang = array(
         "edit" => "Edit",
         "cancel" => "Cancel",
         "settings" => "Settings",
-        "logout" => "Logout"
+        "logout" => "Logout",
+        "announcements" => "Announcements",
+        "time" => "Time",
+        "message" => "Messsage"
     ),
     "tr" => array(
         "todo" => "Yapılacaklar",
@@ -30,24 +33,12 @@ $lang = array(
         "edit" => "Düzenle",
         "cancel" => "İptal Et",
         "settings" => "Ayarlar",
-        "logout" => "Çıkış yap"
+        "logout" => "Çıkış yap",
+        "announcements" => "Duyurular",
+        "time" => "Zaman",
+        "message" => "Mesaj"
     )
 );
-
-/////////////////
-//Start add log//
-/////////////////
-function addLog($db, $message) {
-    date_default_timezone_set("Europe/Istanbul");
-    $query = $db->prepare("INSERT INTO logs (timestamp, message) VALUES (:timestamp, :message)");
-    $query->bindParam(":timestamp", date("[d.m.Y H:i:s]", time()));
-    $new_message = "[".$_SESSION["username"]."]".htmlspecialchars($message);
-    $query->bindParam(":message", $new_message);
-    $query->execute();
-}
-///////////////
-//End add log//
-///////////////
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_GET["edit_task"])) {
@@ -58,12 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $value = $_POST["value"];
         $taskId = $_GET["edit_task"];
 
-        $query = $db->prepare("UPDATE tasks SET color = :color, value = :value WHERE id = :id");
-        $query->bindParam(":color", $color);
-        $query->bindParam(":value", htmlspecialchars($value));
-        $query->bindParam(":id", $taskId);
-        $query->execute();
-        addLog($db, "Edit Task(" .$taskId."): ". htmlspecialchars($value));
+        $query = $db->query("SELECT * FROM tasks WHERE id = $taskId; UPDATE tasks SET color = $color, value = ".htmlspecialchars($value)." WHERE id = $taskId")->fetch();
+        addLog("[" .$taskId."] <o>". $query["value"]."</o> => ".htmlspecialchars($value), "Edit Task");
 
         header("Location: index.php");
         /////////////////
@@ -85,7 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $query->execute();
 
         $lastInsertedId = $db->lastInsertId();
-        addLog($db, "Add Task(" .$lastInsertedId."): ". htmlspecialchars($taskvalue));
+        addLog("[" .$lastInsertedId."] ". htmlspecialchars($taskvalue), "Add Task");
 
         header("Location: index.php");
         ////////////////
@@ -102,7 +89,7 @@ if (isset($_GET["task_delete"])) {
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; DELETE FROM tasks WHERE id = $taskId")->fetch();
 
-    addLog($db, "Delete Task(" . $taskId . "): " . $query["value"]);
+    addLog("[" . $taskId . "] " . $query["value"], "Delete Task");
 
     header("Location: index.php");
 }
@@ -118,7 +105,7 @@ if (isset($_GET["task_move_right"])) {
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; UPDATE tasks SET level = level + 1 WHERE id = $taskId")->fetch();
 
-    addLog($db, "Move Right Task(" . $taskId . "): " . $query["value"]);
+    addLog("[" . $taskId . "] " . $query["value"], "Move Right Task");
 
     header("Location: index.php");
 }
@@ -134,7 +121,7 @@ if (isset($_GET["task_move_left"])) {
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; UPDATE tasks SET level = level - 1 WHERE id = $taskId")->fetch();
 
-    addLog($db, "Move Left Task(" . $taskId . "): " . $query["value"]);
+    addLog("[" . $taskId . "] " . $query["value"], "Move Left Task");
 
     header("Location: index.php");
 }
@@ -148,10 +135,33 @@ if (isset($_GET["task_move_left"])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/style/index.css">
     <title>Task Board</title>
 </head>
 <body>
+    <div id="announcements-panel-bg" style="visibility: hidden;">
+        <div id="announcements-panel">
+            <h1><?php echo $lang[$langcode]["announcements"] ?></h1>
+            <table>
+                <tr>
+                    <td><?php echo $lang[$langcode]["time"] ?></td>
+                    <td><?php echo $lang[$langcode]["message"] ?></td>
+                </tr>
+                <?php
+                    $query = $db->query("SELECT * FROM announcements ORDER BY id desc")->fetchAll();
+
+                    foreach ($query as $item) {
+                ?>
+                <tr>
+                    <td><?php echo $item['time']; ?></td>
+                    <td><?php echo $item['value']; ?></td>
+                </tr>
+                <?php
+                    }
+                ?>
+            </table>
+        </div>
+    </div>
     <div class="edit-task-panel-back" style="visibility: hidden;">
         <div class="edit-task-panel">
             <form id="edit-task-form" action="" method="post">
@@ -238,6 +248,9 @@ if (isset($_GET["task_move_left"])) {
     </div>
     <div class="user-data-div">
         <?php echo $_SESSION["username"]; ?> • <a href="settings.php"><?php echo $lang[$langcode]["settings"] ?></a> • <a href="logout.php"><?php echo $lang[$langcode]["logout"] ?></a>
+    </div>
+    <div id="announcement-button">
+        <img src="src/announcement.png" alt="announcements">
     </div>
 </body>
 </html>
