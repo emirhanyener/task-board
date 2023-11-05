@@ -12,11 +12,15 @@ if(!isset($_SESSION["admin"])){
 $lang = array(
     "en" => array(
         "time" => "Time",
-        "message" => "Message"
+        "message" => "Message",
+        "user" => "User",
+        "status" => "Status"
     ),
     "tr" => array(
         "time" => "Zaman",
-        "message" => "Mesaj"
+        "message" => "Mesaj",
+        "user" => "Kullanıcı",
+        "status" => "Durum"
     )
 );
 ?>
@@ -50,19 +54,28 @@ $lang = array(
         tr{
             border-spacing: 0px;
         }
+        o{
+            text-decoration: line-through;
+        }
     </style>
 </head>
 <body>
     <table>
+        <td>Id</td>
         <td><?php echo $lang[$langcode]["time"] ?></td>
+        <td><?php echo $lang[$langcode]["user"] ?></td>
+        <td><?php echo $lang[$langcode]["status"] ?></td>
         <td><?php echo $lang[$langcode]["message"] ?></td>
     <?php
         $logs = $db->query("select * from logs order by id desc")->fetchAll();
         foreach ($logs as $log) {
     ?>
         <tr>
+            <td><?php echo $log["id"] ?></td>
             <td><?php echo $log["timestamp"] ?></td>
-            <td><?php echo $log["message"] ?></td>
+            <td><?php echo explode(",", $log["message"])[0] ?></td>
+            <td><?php echo explode(",", $log["message"])[1] ?></td>
+            <td><?php echo explode(",", $log["message"])[2] ?></td>
         </tr>
     <?php
         }
