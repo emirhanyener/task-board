@@ -4,7 +4,7 @@ session_start();
 include "db.php";
 include "config.php";
 
-if(!isset($_SESSION["username"])){
+if(!isset($_SESSION["username"]) && !($observer_code == $_GET["observer_code"])){
     header("Location: login.php");
 }
 
@@ -40,7 +40,7 @@ $lang = array(
     )
 );
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION["username"])) {
     if (isset($_GET["edit_task"])) {
         ///////////////////
         //Start edit task//
@@ -48,8 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $color = $_POST["color"];
         $value = $_POST["value"];
         $taskId = $_GET["edit_task"];
-
-        $query = $db->query("SELECT * FROM tasks WHERE id = $taskId; UPDATE tasks SET color = $color, value = ".htmlspecialchars($value)." WHERE id = $taskId")->fetch();
+        $query = $db->query("SELECT * FROM tasks WHERE id = $taskId; UPDATE tasks SET color = '$color', value = '".htmlspecialchars($value)."' WHERE id = $taskId")->fetch();
         addLog("[" .$taskId."] <o>". $query["value"]."</o> => ".htmlspecialchars($value), "Edit Task");
 
         header("Location: index.php");
@@ -84,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 /////////////////////
 //Start delete task//
 /////////////////////
-if (isset($_GET["task_delete"])) {
+if (isset($_GET["task_delete"]) && isset($_SESSION["username"])) {
     $taskId = $_GET["task_delete"];
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; DELETE FROM tasks WHERE id = $taskId")->fetch();
@@ -100,7 +99,7 @@ if (isset($_GET["task_delete"])) {
 /////////////////////////
 //Start move right task//
 /////////////////////////
-if (isset($_GET["task_move_right"])) {
+if (isset($_GET["task_move_right"]) && isset($_SESSION["username"])) {
     $taskId = $_GET["task_move_right"];
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; UPDATE tasks SET level = level + 1 WHERE id = $taskId")->fetch();
@@ -116,7 +115,7 @@ if (isset($_GET["task_move_right"])) {
 ////////////////////////
 //Start move left task//
 ////////////////////////
-if (isset($_GET["task_move_left"])) {
+if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
     $taskId = $_GET["task_move_left"];
     
     $query = $db->query("SELECT * FROM tasks where id=$taskId; UPDATE tasks SET level = level - 1 WHERE id = $taskId")->fetch();
@@ -191,18 +190,24 @@ if (isset($_GET["task_move_left"])) {
         ?>
             <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
                 <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
-                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
-                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?><a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a><?php } ?>
+                <div <?php if(isset($_SESSION["username"])){ ?>ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"<?php } ?>><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?>
                 <div class="task_move_arrows">
                     <a href="?task_move_right=<?php echo $task['id']; ?>" class="move_right_link">►</a>
                 </div>
+                <?php } ?>
             </div>
-        <?php }} ?>
-
+        <?php }} 
+        if(isset($_SESSION["username"])){
+        ?>
         <form action="/?level=1" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
+        <?php
+        }
+        ?>
         </div>
         <div class="div5 task-panel">
         <?php
@@ -211,19 +216,25 @@ if (isset($_GET["task_move_left"])) {
         ?>
             <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
                 <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
-                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
-                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?><a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a><?php } ?>
+                <div <?php if(isset($_SESSION["username"])){ ?>ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"<?php } ?>><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?>
                 <div class="task_move_arrows">
                     <a href="?task_move_left=<?php echo $task['id']; ?>" class="move_left_link">◄</a> 
                     <a href="?task_move_right=<?php echo $task['id']; ?>" class="move_right_link">►</a>
                 </div>
+                <?php } ?>
             </div>
-        <?php }} ?>
-
+        <?php }}  
+        if(isset($_SESSION["username"])){
+        ?>
         <form action="/?level=2" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
+        <?php
+        }
+        ?>
         </div>
         <div class="div6 task-panel">
         <?php
@@ -232,23 +243,31 @@ if (isset($_GET["task_move_left"])) {
         ?>
             <div class="task-item" oncontextmenu="CopyToClipboardFunction(event, '<?php echo $task['value']; ?>')">
                 <div style="background-color: <?php echo $task['color']; ?>;" class="task-item-color"></div>
-                <a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a>
-                <div ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?><a href="?task_delete=<?php echo $task['id']; ?>" class="remove_task_link">X</a><?php } ?>
+                <div <?php if(isset($_SESSION["username"])){ ?>ondblclick="openEditPanel('<?php echo $task['id']; ?>', '<?php echo $task['value']; ?>', '<?php echo $task['color']; ?>')"<?php } ?>><?php echo $task['value']; ?><br><font class="task-user-text"><?php echo $db->query("select * from users where id=".$task["userid"])->fetch()["username"]; ?></font></div>
+                <?php if(isset($_SESSION["username"])){ ?>
                 <div class="task_move_arrows">
                     <a href="?task_move_left=<?php echo $task['id']; ?>" class="move_left_link">◄</a> 
                 </div>
+                <?php } ?>
             </div>
-        <?php }} ?>
-
+        <?php }}  
+        if(isset($_SESSION["username"])){
+        ?>
         <form action="/?level=3" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
             <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
         </form>
+        <?php
+        }
+        ?>
         </div>
     </div>
+    <?php if(isset($_SESSION["username"])){ ?>
     <div class="user-data-div">
         <?php echo $_SESSION["username"]; ?> • <a href="settings.php"><?php echo $lang[$langcode]["settings"] ?></a> • <a href="logout.php"><?php echo $lang[$langcode]["logout"] ?></a>
     </div>
+    <?php } ?>
     <div id="announcement-button">
         <img src="src/announcement.png" alt="announcements">
     </div>
