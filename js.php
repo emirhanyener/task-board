@@ -18,6 +18,21 @@
         document.querySelector(".edit-task-panel-back").style.visibility = "hidden";
     });
 
+    <?php
+        if(!isset($_COOKIE['announcement_viewed'])){
+            setcookie("announcement_viewed", " ", time() + 900);
+    ?>
+    document.querySelector("#announcements-panel-bg").style.visibility = "visible";
+    <?php
+        }
+    ?>
+    document.querySelector("#announcement-button").addEventListener("click", (event) => {
+        if(document.querySelector("#announcements-panel-bg").style.visibility == "hidden")
+            document.querySelector("#announcements-panel-bg").style.visibility = "visible";
+        else
+            document.querySelector("#announcements-panel-bg").style.visibility = "hidden";
+    });
+
     function openEditPanel(filename, value, color){
         document.querySelector(".edit-task-panel-back").style.visibility = "visible";
         
