@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $_SESSION["username"] = $query["username"];
       $_SESSION["userid"] = $query["id"];
       $_SESSION["admin"] = $query["is_admin"];
+      addLog("", "Login");
       header("Location: index.php");
     } else{
       header("Location: login.php");
@@ -42,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $lang[$langcode]["login"] ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/style/login.css">
 </head>
 <body>
     <div class="container">
