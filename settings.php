@@ -10,13 +10,15 @@ $lang = array(
         "username" => "Username",
         "password" => "Password",
         "settings" => "Settings",
+        "task_board" => "Task Board",
         "save" => "Save"
     ),
     "tr" => array(
         "username" => "Kullanıcı Adı",
         "password" => "Şifre",
         "settings" => "Ayarlar",
-        "save" => "Katdet"
+        "task_board" => "Görev Panosu",
+        "save" => "Kaydet"
     )
 );
 ?>
@@ -35,13 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $lang[$langcode]["settings"] ?></title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/style/settings.css">
 </head>
 <body>
     <div class="container">
         <div class="panel">
             <h1><?php echo $lang[$langcode]["settings"] ?></h1>
-            <hr>
             <form action="" method="post">
                 <table>
                     <tr><td><?php echo $lang[$langcode]["username"] ?>: </td><td><?php echo $_SESSION["username"] ?></td></tr>
@@ -51,5 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+    <a href="index.php">
+        <div class="task-board-button">
+            ← <?php echo $lang[$langcode]["task_board"] ?>
+        </div>
+    </a>
 </body>
 </html>
