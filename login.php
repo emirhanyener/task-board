@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
         <div class="panel">
             <h1><?php echo $lang[$langcode]["login"] ?></h1>
-            <hr>
             <form action="" method="post">
                 <table>
                     <tr><td><?php echo $lang[$langcode]["username"] ?>: </td><td><input type="text" name="username" id="" class="form-text"></td></tr>
