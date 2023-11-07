@@ -27,7 +27,11 @@
             "user" => "User",
             "status" => "Status",
             "database_created" => "Database created!",
-            "database_already_created" => "Database already created."
+            "database_already_created" => "Database already created.",
+            "announcement_placeholder" => "Announcement text...",
+            "add" => "Add",
+            "events" => "Events",
+            "remove" => "Remove",
         ),
         "tr" => array(
             "todo" => "Yapılacaklar",
@@ -51,7 +55,11 @@
             "user" => "Kullanıcı",
             "status" => "Durum",
             "database_created" => "Veritabanı oluşturuldu!",
-            "database_already_created" => "Veritabanı zaten oluşturulmuş."
+            "database_already_created" => "Veritabanı zaten oluşturulmuş.",
+            "announcement_placeholder" => "Duyuru metni...",
+            "add" => "Ekle",
+            "events" => "Olaylar",
+            "remove" => "Sil",
         )
     );
 ?>

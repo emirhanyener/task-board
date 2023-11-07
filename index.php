@@ -7,11 +7,10 @@ include "config.php";
 if(!isset($_SESSION["username"]) && !($observer_code == $_GET["observer_code"])){
     header("Location: login.php");
 }
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION["username"])) {
     if (isset($_GET["edit_task"])) {
         ///////////////////
-        //Start edit task//
+        //Start add task//
         ///////////////////
         $color = $_POST["color"];
         $value = $_POST["value"];
@@ -23,6 +22,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION["username"])) {
         /////////////////
         //End edit task//
         /////////////////
+    }
+}
+if (isset($_GET["announcement_id"]) && $_SESSION["admin"] == 1) {
+    $announcement_id = $_GET["announcement_id"];
+    $query = $db->query("SELECT * FROM announcements where id = $announcement_id; DELETE FROM announcements WHERE id = $announcement_id")->fetch();
+    addLog("[" .$announcement_id. "] " . $query["value"], "Delete Announcement");
+    header("Location: index.php");
+}
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION["username"])) {
+    if (isset($_POST["announcement_text"]) && $_SESSION["admin"] == 1) {
+        //////////////////////////
+        //Start add announcement//
+        //////////////////////////
+        $value = $_POST["announcement_text"];
+        date_default_timezone_set("Europe/Istanbul");
+
+        $query = $db->prepare("INSERT INTO announcements (value, time) VALUES (:value, :time)");
+        $query->bindParam(":value", htmlspecialchars($value));
+        $query->bindParam(":time", date("d.m.Y H:i:s", time()));
+        $query->execute();
+
+        $lastInsertedId = $db->lastInsertId();
+        addLog("[" .$lastInsertedId."] ". htmlspecialchars($value), "Add Announcement");
+
+        header("Location: index.php");
+        ////////////////////////
+        //End add announcement//
+        ////////////////////////
     } else {
         //////////////////
         //Start add task//
@@ -113,6 +140,13 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 <tr>
                     <td><?php echo $lang[$langcode]["time"] ?></td>
                     <td><?php echo $lang[$langcode]["message"] ?></td>
+                    <?php
+                        if($_SESSION["admin"] == 1){
+                    ?>
+                    <td><?php echo $lang[$langcode]["events"] ?></td>
+                    <?php
+                        }
+                    ?>
                 </tr>
                 <?php
                     $query = $db->query("SELECT * FROM announcements ORDER BY id desc")->fetchAll();
@@ -122,7 +156,32 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 <tr>
                     <td><?php echo $item['time']; ?></td>
                     <td><?php echo $item['value']; ?></td>
+                    
+                    <?php
+                        if($_SESSION["admin"] == 1){
+                    ?>
+                    <td><a href="?announcement_id=<?php echo $item['id']; ?>" class="remove-link"><?php echo $lang[$langcode]["remove"] ?></a></td>
+                    <?php
+                        }
+                    ?>
+
                 </tr>
+                <?php
+                    }
+                    if($_SESSION["admin"] == 1){
+                ?>
+                <form action="" method="post">
+                    <tr>
+                        <td colspan="2">
+                                <textarea name="announcement_text" id="" class="announcement-textarea" placeholder="<?php echo $lang[$langcode]['announcement_placeholder']; ?>"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="submit" value="<?php echo $lang[$langcode]["add"] ?>" class="announcement-button">
+                        </td>
+                    </tr>
+                </form>
                 <?php
                     }
                 ?>
