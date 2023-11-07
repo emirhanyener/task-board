@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="" method="post">
                 <table>
                     <tr><td><?php echo $lang[$langcode]["username"] ?>: </td><td><input type="text" name="username" id="" class="form-text"></td></tr>
-                    <tr><td><?php echo $lang[$langcode]["password"] ?>: </td><td><input type="text" name="password" id="" class="form-text"></td></tr>
+                    <tr><td><?php echo $lang[$langcode]["password"] ?>: </td><td><input type="text" name="password" id="" class="form-text password-input"></td></tr>
                     <tr><td colspan="2"><input type="submit" value="<?php echo $lang[$langcode]["login"] ?>" class="form-button"></td></tr>
                 </table>
             </form>

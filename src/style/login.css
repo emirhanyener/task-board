@@ -52,7 +52,7 @@ input[type=text]{
     border: 1px solid gray;
 }
 
-input[type=text]:nth-child(2){
+.password-input{
     -webkit-text-security: disc;
 }
 input[type=submit]{
