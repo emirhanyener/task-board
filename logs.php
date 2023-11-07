@@ -7,22 +7,6 @@ include "config.php";
 if(!isset($_SESSION["admin"])){
     header("Location: index.php");
 }
-
-//Localization
-$lang = array(
-    "en" => array(
-        "time" => "Time",
-        "message" => "Message",
-        "user" => "User",
-        "status" => "Status"
-    ),
-    "tr" => array(
-        "time" => "Zaman",
-        "message" => "Mesaj",
-        "user" => "Kullanıcı",
-        "status" => "Durum"
-    )
-);
 ?>
 
 <!DOCTYPE html>

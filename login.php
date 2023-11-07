@@ -3,20 +3,6 @@ session_start();
 ob_start();
 include "db.php";
 include "config.php";
-
-//Localization
-$lang = array(
-    "en" => array(
-        "username" => "Username",
-        "password" => "Password",
-        "login" => "Login"
-    ),
-    "tr" => array(
-        "username" => "Kullanıcı Adı",
-        "password" => "Şifre",
-        "login" => "Giriş yap"
-    )
-);
 ?>
 <?php
 if(isset($_SESSION["username"])){

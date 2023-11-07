@@ -1,5 +1,6 @@
 <?php
     include("db.php"); 
+    include("config.php"); 
     try {
         $db->query("CREATE TABLE `announcements` (
             `id` int(11) NOT NULL,
@@ -37,8 +38,8 @@
         $db->query("ALTER TABLE `logs` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
         $db->query("ALTER TABLE `tasks` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
         $db->query("ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
-        echo "Database created!";
+        echo $lang[$langcode]["database_created"];
     } catch (PDOException $e) {
-        echo "Database already created!";
+        echo $lang[$langcode]["database_already_created"];
     }
 ?>

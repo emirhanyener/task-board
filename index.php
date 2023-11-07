@@ -8,38 +8,6 @@ if(!isset($_SESSION["username"]) && !($observer_code == $_GET["observer_code"]))
     header("Location: login.php");
 }
 
-//Localization
-$lang = array(
-    "en" => array(
-        "todo" => "TO-DO",
-        "in_progress" => "In Progress",
-        "done" => "Done",
-        "task_value" => "Task Value",
-        "edit_task" => "Edit Task",
-        "edit" => "Edit",
-        "cancel" => "Cancel",
-        "settings" => "Settings",
-        "logout" => "Logout",
-        "announcements" => "Announcements",
-        "time" => "Time",
-        "message" => "Messsage"
-    ),
-    "tr" => array(
-        "todo" => "Yapılacaklar",
-        "in_progress" => "Devam Ediyor",
-        "done" => "Bitti",
-        "task_value" => "Görev içeriği",
-        "edit_task" => "Görevi Düzenle",
-        "edit" => "Düzenle",
-        "cancel" => "İptal Et",
-        "settings" => "Ayarlar",
-        "logout" => "Çıkış yap",
-        "announcements" => "Duyurular",
-        "time" => "Zaman",
-        "message" => "Mesaj"
-    )
-);
-
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_SESSION["username"])) {
     if (isset($_GET["edit_task"])) {
         ///////////////////
