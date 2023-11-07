@@ -4,7 +4,7 @@ session_start();
 include "db.php";
 include "config.php";
 
-if(!isset($_SESSION["admin"])){
+if($_SESSION["admin"] == 0){
     header("Location: index.php");
 }
 ?>
