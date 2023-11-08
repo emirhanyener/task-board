@@ -172,12 +172,12 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 ?>
                 <form action="" method="post">
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                                 <textarea name="announcement_text" id="" class="announcement-textarea" placeholder="<?php echo $lang[$langcode]['announcement_placeholder']; ?>"></textarea>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="3">
                             <input type="submit" value="<?php echo $lang[$langcode]["add"] ?>" class="announcement-button">
                         </td>
                     </tr>
