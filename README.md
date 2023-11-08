@@ -16,10 +16,14 @@ JavaScript task board without frameworks or modules. With this project, a board 
 - [X] Observer User(with observer code)
 
 ## Images
-### Main
-![main](images/screenshot1.png)
+### Main Page
+![main](images/main_page.png)
 ### Edit Task
-![main](images/screenshot2.png)
+![edit task](images/edit_task.png)
+### Announcements
+![announcements](images/announcements.png)
+### Settings
+![settings](images/settings.png)
 
 ## License
 [MIT License](LICENSE)
