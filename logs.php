@@ -46,10 +46,10 @@ if($_SESSION["admin"] == 0){
 <body>
     <table>
         <td>Id</td>
-        <td><?php echo $lang[$langcode]["time"] ?></td>
-        <td><?php echo $lang[$langcode]["user"] ?></td>
-        <td><?php echo $lang[$langcode]["status"] ?></td>
-        <td><?php echo $lang[$langcode]["message"] ?></td>
+        <td><?php echo $lang["time"] ?></td>
+        <td><?php echo $lang["user"] ?></td>
+        <td><?php echo $lang["status"] ?></td>
+        <td><?php echo $lang["message"] ?></td>
     <?php
         $logs = $db->query("select * from logs order by id desc")->fetchAll();
         foreach ($logs as $log) {

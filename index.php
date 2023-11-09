@@ -135,15 +135,15 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
 <body>
     <div id="announcements-panel-bg" style="visibility: hidden;">
         <div id="announcements-panel">
-            <h1><?php echo $lang[$langcode]["announcements"] ?></h1>
+            <h1><?php echo $lang["announcements"] ?></h1>
             <table>
                 <tr>
-                    <td><?php echo $lang[$langcode]["time"] ?></td>
-                    <td><?php echo $lang[$langcode]["message"] ?></td>
+                    <td><?php echo $lang["time"] ?></td>
+                    <td><?php echo $lang["message"] ?></td>
                     <?php
                         if($_SESSION["admin"] == 1){
                     ?>
-                    <td><?php echo $lang[$langcode]["events"] ?></td>
+                    <td><?php echo $lang["events"] ?></td>
                     <?php
                         }
                     ?>
@@ -160,7 +160,7 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                     <?php
                         if($_SESSION["admin"] == 1){
                     ?>
-                    <td><a href="?announcement_id=<?php echo $item['id']; ?>" class="remove-link"><?php echo $lang[$langcode]["remove"] ?></a></td>
+                    <td><a href="?announcement_id=<?php echo $item['id']; ?>" class="remove-link"><?php echo $lang["remove"] ?></a></td>
                     <?php
                         }
                     ?>
@@ -173,12 +173,12 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 <form action="" method="post">
                     <tr>
                         <td colspan="3">
-                                <textarea name="announcement_text" id="" class="announcement-textarea" placeholder="<?php echo $lang[$langcode]['announcement_placeholder']; ?>"></textarea>
+                                <textarea name="announcement_text" id="" class="announcement-textarea" placeholder="<?php echo $lang['announcement_placeholder']; ?>"></textarea>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                            <input type="submit" value="<?php echo $lang[$langcode]["add"] ?>" class="announcement-button">
+                            <input type="submit" value="<?php echo $lang["add"] ?>" class="announcement-button">
                         </td>
                     </tr>
                 </form>
@@ -191,20 +191,20 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
     <div class="edit-task-panel-back" style="visibility: hidden;">
         <div class="edit-task-panel">
             <form id="edit-task-form" action="" method="post">
-                <h1><?php echo $lang[$langcode]["edit_task"] ?></h1>
+                <h1><?php echo $lang["edit_task"] ?></h1>
                 <textarea name="value" class="edit-task-textarea"></textarea>
                 <div>
-                    <input type="button" value="<?php echo $lang[$langcode]["cancel"] ?>" class="edit-task-panel-button"></button>
-                    <button type="submit" class="edit-task-panel-button"><?php echo $lang[$langcode]["edit"] ?></button>
+                    <input type="button" value="<?php echo $lang["cancel"] ?>" class="edit-task-panel-button"></button>
+                    <button type="submit" class="edit-task-panel-button"><?php echo $lang["edit"] ?></button>
                 </div>
                 <input type="color" name="color" id="edit-task-color">
             </form>
         </div>
     </div>
     <div class="parent">
-        <div class="div1 table-header"><?php echo $lang[$langcode]["todo"] ?></div>
-        <div class="div2 table-header"><?php echo $lang[$langcode]["in_progress"] ?></div>
-        <div class="div3 table-header"><?php echo $lang[$langcode]["done"] ?></div>
+        <div class="div1 table-header"><?php echo $lang["todo"] ?></div>
+        <div class="div2 table-header"><?php echo $lang["in_progress"] ?></div>
+        <div class="div3 table-header"><?php echo $lang["done"] ?></div>
 
         <div class="div4 task-panel">
         <?php
@@ -225,12 +225,12 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 </div>
                 <?php } ?>
             </div>
-        <?php }} 
+        <?php }}
         if(isset($_SESSION["username"])){
         ?>
         <form action="/?level=1" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
-            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
+            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang["task_value"] ?>">
         </form>
         <?php
         }
@@ -252,12 +252,12 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 </div>
                 <?php } ?>
             </div>
-        <?php }}  
+        <?php }}
         if(isset($_SESSION["username"])){
         ?>
         <form action="/?level=2" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
-            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
+            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang["task_value"] ?>">
         </form>
         <?php
         }
@@ -278,12 +278,12 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
                 </div>
                 <?php } ?>
             </div>
-        <?php }}  
+        <?php }}
         if(isset($_SESSION["username"])){
         ?>
         <form action="/?level=3" method="post" class="add-task-form">
             <input type="color" value="#00AAFF" name="taskcolor" class="add-task-color" />
-            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang[$langcode]["task_value"] ?>">
+            <input type="text" class="add-task-text" name="taskvalue" placeholder="<?php echo $lang["task_value"] ?>">
         </form>
         <?php
         }
@@ -292,7 +292,7 @@ if (isset($_GET["task_move_left"]) && isset($_SESSION["username"])) {
     </div>
     <?php if(isset($_SESSION["username"])){ ?>
     <div class="user-data-div">
-        <?php echo $_SESSION["username"]; ?> • <a href="settings.php"><?php echo $lang[$langcode]["settings"] ?></a> • <a href="logout.php"><?php echo $lang[$langcode]["logout"] ?></a>
+        <?php echo $_SESSION["username"]; ?> • <a href="settings.php"><?php echo $lang["settings"] ?></a> • <a href="logout.php"><?php echo $lang["logout"] ?></a>
     </div>
     <?php } ?>
     <div id="announcement-button">
